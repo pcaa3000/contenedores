@@ -83,3 +83,44 @@ Instalación de contendores [docker](https://docs.docker.com/engine/install/).
 -   `dive imagename:tag`, para ver de manera más detallada el historial de capas de una imagen.[[+](https://github.com/wagoodman/dive)]. Ctrl-U, para ver los archivos modificados.
 
 > 💡 `FROM scratch`, es la base para imágenes linux, que sólo contiene  el kernel del OS.
+
+## Desarrollo con Docker
+
+-   `COPY [".","/usr/src"]`, para copiar archivos de un origen, en este caso del contexto de *build* **"."**, hacia un destino **"/usr/src"**
+-   `WORKDIR /usr/src`, es como un `cd` de la línea de comandos hacia el directorio base.
+-   `EXPOSE 3000`, para abrir o exponer el puerto, en  este caso _3000_.
+-   `CMD ["node","index.js"]`, Es el comando que se ejecutará cuando se inicie el contenedor.
+
+> 💡 Si bien la descarga de las capas de la imágenes de docker es en simultaneo, la extracción de las mismas se ejecuta de manera secuencial.
+
+-   `docker run -rm -p 3000:3000 imagename`, para eliminar el contenedor, cuando termine el ciclo del o contenedor o se apague.
+
+```docker
+FROM node:10
+COPY [".","/usr/src"]
+WORKDIR /usr/src
+RUN npm install
+EXPOSE 3000
+CMD ["node","index.js"]
+```
+
+-   En docker, cuando se vuelve a ejecutar el comando **build** del *dockerfile*, este usa su cache sobre las capas que no han sufrido cambios, optimizando la reconstrucción de la imagen.
+-   En nuestro caso podemos optimizar nuestro dockerfile de la siguiente manera. Copiando sólo los archivos necesarios para la instalación de dependencias y el resto de archivos al final.
+
+```docker
+FROM node:10
+COPY ["package.json","package-lock.json","/usr/src"]
+WORKDIR /usr/src
+RUN npm install
+COPY [".","/usr/src"]
+EXPOSE 3000
+CMD ["node","index.js"]
+```
+
+-   Para no tener que apagar el container cada vez que realizamos un cambio, Node cuenta con una utilidad llamada nodemon, el cual permite reiniciar el servicio de node cada vez que detecta un cambio en los archivos de node. Para ello cambiamos `CMD ["node","index.js"]` por `CMD ["npx", "nodemon","index.js"]`
+-   `docker network ls`, nos permite listar las redes disponible para los contenedores.
+-   El driver por defecto de docker es _brigde_, pero también se puede usar el driver _host_ que permite que usar la red del _host_ y _none_ que no cuenta con conexión de red.
+-   `docker create network --attachable namenet`, para crear una red que permita que más container se conecten a él.
+-   `docker network connect namenet imagename`, para conectar una imagen a una red.
+-   `docker network inspect namenet`, para inspeccionar y ver los contenedores conectados a la namenet
+-   `doker run -d --name app -p 3000:3000 --env MONGO_URL=mongodb://db:27027/test app`, iniciamos nuestra imagen app con variables de entorno, llamando a la imagen de mongo que ya tenemos iniciada de nombre **db**.
