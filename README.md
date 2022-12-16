@@ -6,15 +6,12 @@ Un contenedor es una agrupación de procesos, entidad lógica. Los procesos que 
 
 ## Contenedores y Maquinas Virtuales
 
-StackEdit stores your files in your browser, which means all your files are automatically saved locally and are accessible **offline!**
-
-## Create files and folders
-
 - Virtualización, Son equipos ejecutando dentro de otra. Las Mv, son pesadas, virtualizan toda OS, son de administración costosa, son lentas al momento de inicializarlas, incia todo el OS.
-![enter image description here](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/what-is-a-container_valprop1?resMode=sharp2&op_usm=1.5,0.65,15,0&qlt=75)
+
+![Virtualizacion](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/what-is-a-container_valprop1?resMode=sharp2&op_usm=1.5,0.65,15,0&qlt=75)
 - Los contenedores son flexibles, livianos, portables, bajo acoplamiento, escalables y seguros. Son versátiles, ya que son ligeras y contienen todas las dependencias para su ejecución, garantizando su ejecución en todos lados.
 
-![enter image description here](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/what-is-a-container_valprop2?resMode=sharp2&op_usm=1.5,0.65,15,0&qlt=75)
+![Contenedores](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/what-is-a-container_valprop2?resMode=sharp2&op_usm=1.5,0.65,15,0&qlt=75)
 
 ## Primeros pasos
 
@@ -54,7 +51,7 @@ Instalación de contendores [docker](https://docs.docker.com/engine/install/).
 -   `docker volume create namevolume`, para crear un nuevo volumen de nombre namevolume, para ser usado por docker.
 -   `docker run -d --name db --mount src=namevolume,dst=/data/db mongo`, creamos un nuevo container de imagen _mongo_, de nombre _db_, que no muestre el output del comando que ejecuta y que use el volumen _volumename_ del host ligado con la ruta _/data/db_ del container.[[+](https://docs.docker.com/storage/volumes/#backup-restore-or-migrate-data-volumes)]
 
-![enter image description here](https://docs.docker.com/storage/images/types-of-mounts-volume.png)
+![Type of mount volume](https://docs.docker.com/storage/images/types-of-mounts-volume.png)
 
 
 
@@ -63,7 +60,8 @@ Instalación de contendores [docker](https://docs.docker.com/engine/install/).
 -   Las imágenes en docker, son templates de contenedores, que son inmutables. Una vez creada no la podemos cambiar.
 -   Las imágenes cuentan _tags_, que es la forma en la que podemos saber cual es la versión de nuestra imagen.
 -   Las imágenes se componen de varias capas, no es único archivo. Cada capa es inmutable, cada capa representa el cambio que ha tenido la imagen desde la capa base, muy parecido al _GIT_.
-![enter image description here](https://imgs.search.brave.com/Kh1OwEBAFHL2DOKAk483Tb_ZI4NNkHO2REmfxnKBNHk/rs:fit:583:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5B/N2Yxa0RfNVlFTmh6/UjJMV0s4eUVBSGFH/QiZwaWQ9QXBp)
+
+![Images Docker](https://imgs.search.brave.com/Kh1OwEBAFHL2DOKAk483Tb_ZI4NNkHO2REmfxnKBNHk/rs:fit:583:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5B/N2Yxa0RfNVlFTmh6/UjJMV0s4eUVBSGFH/QiZwaWQ9QXBp)
 
 -   `docker image ls`, para listar las imágenes que tenemos
 -   `docker pull imagename`, para traer una imagen de docker hub hacia nuestro sistema.
@@ -124,3 +122,9 @@ CMD ["node","index.js"]
 -   `docker network connect namenet imagename`, para conectar una imagen a una red.
 -   `docker network inspect namenet`, para inspeccionar y ver los contenedores conectados a la namenet
 -   `doker run -d --name app -p 3000:3000 --env MONGO_URL=mongodb://db:27027/test app`, iniciamos nuestra imagen app con variables de entorno, llamando a la imagen de mongo que ya tenemos iniciada de nombre **db**.
+
+## Mantenimiento Contenedores
+
+-   `docker container prune`, para depurar contener que están detenidos.
+-   `docker system prune`, para depurar contener, imagenes que no están en uso.
+-   `docker stats`, te permite ver los recursos consumidos actualmente por los contenedores.
